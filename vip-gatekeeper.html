@@ -186,7 +186,8 @@ figcaption{font-size:.82rem;color:var(--muted)}
   <section aria-labelledby="t-h">
     <div class="sec-head"><h2 id="t-h">Tested end to end</h2></div>
     <div class="cs">
-      <p>On 16 November 2026 I ran the whole flow with a transfer receipt. A monthly payment went from photo to an <strong>active member with a 30-day expiry</strong> and an invite link. A second test took the reject path, and the customer got the rejection message. The bot is live, running on n8n.</p>
+      <p>On 16 November 2026 I ran the whole flow with a transfer receipt. A monthly payment went from photo to an <strong>active member with a 30-day expiry</strong> and an invite link. A second test took the reject path, and the customer got the rejection message.</p>
+      <p>On 18 November I tested the fraud checks with a real ₦2,000 transfer. The new receipt reached me for approval within seconds. I then tried to reuse it two ways: <strong>forwarding the same receipt</strong>, and <strong>uploading the same screenshot again</strong> from the phone's gallery. The bot blocked both and told the sender the receipt had already been used. A receipt paid to a different account was turned away before it ever reached me. The bot is live, running on n8n.</p>
       <p>This is a new build, so I'll add real numbers here (receipts checked, fakes caught, time saved) once paying members are going through it.</p>
     </div>
   </section>
