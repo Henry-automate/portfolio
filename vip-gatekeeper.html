@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Case study: VIP Telegram gatekeeper · Henry Oyedeji</title>
+<meta name="description" content="How I built a Telegram bot that sells paid channel access by bank transfer, checks each receipt with AI, blocks reused receipts and lets the owner approve members with one tap.">
+<meta property="og:title" content="Case study: a Telegram bot that checks payment receipts before you do">
+<meta property="og:description" content="Paid Telegram access by bank transfer, with AI receipt checks, duplicate blocking and one-tap approval. Built in n8n.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://henry-oyedeji.netlify.app/vip-gatekeeper.html">
+<meta property="og:image" content="https://henry-oyedeji.netlify.app/images/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d7552'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EHO%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+[hidden]{display:none!important}
+/* Layout: one calm reading column. Hero → services → proof → projects → tools → about → build log → free workflow → contact. */
+:root{
+  --bg:#f5f7f4; --surface:#ffffff; --ink:#14201a; --muted:#56655c; --line:#d9e0da;
+  --accent:#1d7552; --accent-soft:#e1efe7; --amber:#a8661c; --amber-soft:#f6ead9;
+  --danger:#b3372b;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1512; --surface:#161e1a; --ink:#e6ede8; --muted:#9aaba1; --line:#28332d;
+  --accent:#5cc79a; --accent-soft:#183428; --amber:#e0a35a; --amber-soft:#33261a; --danger:#ef7d70; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1512; --surface:#161e1a; --ink:#e6ede8; --muted:#9aaba1; --line:#28332d;
+  --accent:#5cc79a; --accent-soft:#183428; --amber:#e0a35a; --amber-soft:#33261a; --danger:#ef7d70; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.1rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.12rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:14px}
+.lede{font-size:1.1rem;color:var(--muted);max-width:60ch}
+.lede strong{color:var(--ink);font-weight:600}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin-top:10px}
+.node{font-family:var(--f-mono);font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);white-space:nowrap}
+.node.end{border-color:var(--accent);background:var(--accent-soft);color:var(--ink);font-weight:500}
+.arrow{color:var(--muted);font-family:var(--f-mono);font-size:.82rem}
+.chain-cap{font-size:.85rem;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:20px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.project{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.project p{color:var(--muted);font-size:.95rem}
+.project a{color:var(--accent);font-size:.9rem;font-weight:500;text-underline-offset:3px}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.stack span{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 7px}
+.pill{align-self:flex-start;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.pill.live{background:var(--accent-soft);color:var(--accent)}
+.pill.wip{background:var(--amber-soft);color:var(--amber)}
+.pill.course{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.entry{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
+.when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+.body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.body p{color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.tag[data-t="Learning"]{color:var(--amber)}
+.empty{color:var(--muted);padding:18px 0}
+.composer{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>label{flex:1 1 160px}
+label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:500}
+input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;box-sizing:border-box}
+textarea{min-height:96px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.status{font-size:.85rem;color:var(--muted)}
+.status.err{color:var(--danger)}
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){ .entry{grid-template-columns:1fr;gap:4px} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:.92rem;background:var(--accent);color:var(--bg);border:0;border-radius:6px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.55;cursor:default}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.service{border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:8px;background:var(--surface);min-width:0}
+.service p{color:var(--muted);font-size:.95rem}
+.price{margin-top:auto;padding-top:6px;font-family:var(--f-mono);font-size:.85rem;color:var(--accent);font-weight:500}
+.proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:18px 16px 18px 0;display:flex;flex-direction:column;gap:4px}
+.stat b{font-family:var(--f-display);font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.88rem;color:var(--muted)}
+.shot{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)}
+.shot img{display:block;width:100%;height:auto}
+a.shot{display:block;cursor:zoom-in}
+.gallery{border-top:1px solid var(--line);padding-top:10px}
+.gallery summary{cursor:pointer;color:var(--accent);font-size:.9rem;font-weight:500;list-style-position:inside}
+.gallery figure{margin:12px 0 0;display:flex;flex-direction:column;gap:6px}
+.gallery figcaption{font-size:.82rem;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.tools span{font-family:var(--f-mono);font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.about{display:flex;flex-direction:column;gap:12px;max-width:62ch}
+.about p{color:var(--muted)}
+.about strong{color:var(--ink);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.panel p{color:var(--muted)}
+form{display:flex;flex-direction:column;gap:12px}
+.hp{position:absolute;left:-9999px}
+.contact-list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.contact-list li{display:flex;gap:10px;flex-wrap:wrap;font-size:.95rem}
+.contact-list .k{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);min-width:84px;padding-top:2px}
+.contact-list a{color:var(--accent);text-underline-offset:3px;overflow-wrap:anywhere}
+.dl{color:var(--accent);font-weight:600}
+</style>
+<style>
+.cs{display:flex;flex-direction:column;gap:14px;max-width:64ch}
+.cs p,.cs li{color:var(--muted)}
+.cs strong{color:var(--ink);font-weight:600}
+.cs ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:10px}
+.back{font-size:.9rem;color:var(--accent);text-underline-offset:3px}
+figure{margin:0;display:flex;flex-direction:column;gap:6px}
+figcaption{font-size:.82rem;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.facts div{padding:16px 16px 16px 0;display:flex;flex-direction:column;gap:2px}
+.facts b{font-family:var(--f-display);font-size:1.15rem}
+.facts span{font-size:.85rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="/#projects">← All projects</a>
+    <span class="eyebrow">Case study · Telegram · n8n · Gemini</span>
+    <h1>A Telegram bot that checks payment receipts before you do</h1>
+    <p class="lede">I built a bot that sells access to a paid Telegram channel by bank transfer. It <strong>reads every receipt with AI, turns away fake and reused ones, and only asks the owner to approve real payments</strong>. Approving takes one tap.</p>
+    <div class="facts">
+      <div><b>Bank transfer</b><span>no payment gateway or card fees</span></div>
+      <div><b>3 checks</b><span>before a human sees a receipt</span></div>
+      <div><b>1 tap</b><span>to approve or reject</span></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="p-h">
+    <div class="sec-head"><h2 id="p-h">The problem</h2></div>
+    <div class="cs">
+      <p>Many Nigerian creators sell paid Telegram groups for signals, tips, coaching or courses, and most customers pay by bank transfer. That avoids card fees, but every sale turns into manual work. The customer sends a screenshot in DMs. The owner opens it, checks the amount against the plan, confirms the money arrived, finds the person, adds them to the channel and notes down when their access expires.</p>
+      <p>That doesn't scale, and it's easy to cheat. An edited screenshot or a receipt someone already used can get through when the owner is busy.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="b-h">
+    <div class="sec-head"><h2 id="b-h">What I built</h2></div>
+    <div class="chain" aria-label="Receipt flow">
+      <span class="node">Telegram</span><span class="arrow">→</span>
+      <span class="node">Is it a receipt?</span><span class="arrow">→</span>
+      <span class="node">Gemini reads it</span><span class="arrow">→</span>
+      <span class="node">Valid payment?</span><span class="arrow">→</span>
+      <span class="node">Used before?</span><span class="arrow">→</span>
+      <span class="node">Save as pending</span><span class="arrow">→</span>
+      <span class="node end">Ask owner</span>
+    </div>
+    <div class="cs">
+      <ol>
+        <li><strong>The customer picks a plan.</strong> The bot shows the plans and the bank details. There is no website and no checkout page, so everything happens inside Telegram.</li>
+        <li><strong>Only receipts go forward.</strong> If the customer sends anything other than a photo, the bot replies with the payment instructions again.</li>
+        <li><strong>AI reads the receipt.</strong> Google Gemini pulls out the amount, the sender's name, the date and the reference. If the image isn't a real transfer receipt, the customer is told straight away.</li>
+        <li><strong>Reused receipts are blocked.</strong> Each receipt is checked against every receipt already in the members sheet, so a screenshot that has been used before can't buy access twice.</li>
+        <li><strong>The owner approves with one tap.</strong> Only receipts that pass every check reach the owner. They arrive as a photo with the details already read out, plus Approve and Reject buttons.</li>
+        <li><strong>Access is granted automatically.</strong> Approval creates a single-use invite link, sends it to the customer and marks them active with a start date and an expiry date. If the owner rejects, the customer gets a polite message and the record is updated.</li>
+      </ol>
+    </div>
+    <figure>
+      <a class="shot" href="images/workflows/vip-gatekeeper-receipts.webp" target="_blank" rel="noopener"><img src="images/workflows/vip-gatekeeper-receipts.webp" alt="The receipt-checking workflow in n8n" loading="lazy"></a>
+      <figcaption>The receipt workflow: AI check, duplicate block, then one-tap approve or reject.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="t-h">
+    <div class="sec-head"><h2 id="t-h">Tested end to end</h2></div>
+    <div class="cs">
+      <p>On 16 November 2026 I ran the whole flow with a transfer receipt. A monthly payment went from photo to an <strong>active member with a 30-day expiry</strong> and an invite link. A second test took the reject path, and the customer got the rejection message. The bot is live, running on n8n.</p>
+      <p>This is a new build, so I'll add real numbers here (receipts checked, fakes caught, time saved) once paying members are going through it.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="w-h">
+    <div class="sec-head"><h2 id="w-h">Who this is for</h2></div>
+    <div class="cs">
+      <p>The same setup fits any business that sells access and gets paid by transfer, such as paid communities, signal and tips channels, coaching groups, course cohorts or member-only WhatsApp groups. Plans and prices live in a Google Sheet, so the owner can change them without touching the workflow.</p>
+    </div>
+    <figure>
+      <a class="shot" href="images/workflows/vip-payments-bot.webp" target="_blank" rel="noopener"><img src="images/workflows/vip-payments-bot.webp" alt="The payments bot workflow in n8n" loading="lazy"></a>
+      <figcaption>The payments bot: plans, bank details, invite links and rejections.</figcaption>
+    </figure>
+    <div class="stack"><span>n8n</span><span>Telegram Bot API</span><span>Google Gemini</span><span>Google Sheets</span></div>
+  </section>
+
+  <section aria-labelledby="c-h">
+    <div class="panel">
+      <h2 id="c-h">Want this for your channel or group?</h2>
+      <p>Tell me how you sell access today and I'll show you how I'd automate it.</p>
+      <div class="hero-cta"><a class="btn" href="/#contact">Start a project</a><a class="btn ghost" href="/#projects">See more work</a></div>
+    </div>
+  </section>
+
+  <footer>Henry Oyedeji · n8n automation builder · henry-oyedeji.netlify.app</footer>
+</div>
+</body>
+</html>

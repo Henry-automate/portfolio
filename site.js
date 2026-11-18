@@ -68,7 +68,7 @@ window.SITE = {
       status: "live", title: "VIP Telegram gatekeeper",
       text: "Sells VIP channel access by bank transfer, with no manual inbox work. The bot shows the plans and bank details, Gemini reads each payment receipt, invalid and already-used receipts are turned away, and I approve real payments with one tap. Approval creates a one-time invite link and activates the member in the sheet.",
       stack: ["n8n", "Telegram Bot API", "Gemini", "Google Sheets", "ngrok"],
-      image: "images/workflows/cards/vip-gatekeeper.webp", link: "", linkText: "",
+      image: "images/workflows/cards/vip-gatekeeper.webp", link: "vip-gatekeeper.html", linkText: "Read the case study",
       gallery: [
         { src: "images/workflows/vip-gatekeeper-receipts.webp", caption: "Receipts: AI receipt check, duplicate block, approve or reject" },
         { src: "images/workflows/vip-payments-bot.webp", caption: "Payments bot: plans, bank details, invite links and rejections" }
