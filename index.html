@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Henry Oyedeji Builds</title>
-<meta name="description" content="Henry Oyedeji builds n8n workflow automations for Nigerian businesses. Projects and a dated build log.">
+<meta name="description" content="Henry Oyedeji builds n8n automations: WhatsApp and Telegram bots, lead alerts and booking systems. Projects, services and a public build log.">
 <meta property="og:title" content="Henry Oyedeji Builds">
 <meta property="og:description" content="n8n automations, WhatsApp and Telegram bots, built in public from Ogun State, Nigeria.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d7552'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EHO%3C/text%3E%3C/svg%3E">
@@ -13,8 +13,8 @@
 *{box-sizing:border-box}
 html{color-scheme:light}
 body{margin:0}
-
-/* Layout: one calm reading column; hero carries the real workflow as a node chain, then projects, then a dated build log. */
+[hidden]{display:none!important}
+/* Layout: one calm reading column. Hero → services → proof → projects → tools → about → build log → free workflow → contact. */
 :root{
   --bg:#f5f7f4; --surface:#ffffff; --ink:#14201a; --muted:#56655c; --line:#d9e0da;
   --accent:#1d7552; --accent-soft:#e1efe7; --amber:#a8661c; --amber-soft:#f6ead9;
@@ -75,23 +75,53 @@ input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:
 textarea{min-height:96px;resize:vertical}
 input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.btn{font:inherit;font-weight:600;font-size:.92rem;background:var(--accent);color:var(--bg);border:0;border-radius:6px;padding:9px 16px;cursor:pointer}
-.btn:disabled{opacity:.55;cursor:default}
 .status{font-size:.85rem;color:var(--muted)}
 .status.err{color:var(--danger)}
 footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
 @media (max-width:520px){ .entry{grid-template-columns:1fr;gap:4px} }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 
+
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:.92rem;background:var(--accent);color:var(--bg);border:0;border-radius:6px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:disabled{opacity:.55;cursor:default}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.service{border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:8px;background:var(--surface);min-width:0}
+.service p{color:var(--muted);font-size:.95rem}
+.price{margin-top:auto;padding-top:6px;font-family:var(--f-mono);font-size:.85rem;color:var(--accent);font-weight:500}
+.proof{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat{padding:18px 16px 18px 0;display:flex;flex-direction:column;gap:4px}
+.stat b{font-family:var(--f-display);font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.88rem;color:var(--muted)}
+.shot{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)}
+.shot img{display:block;width:100%;height:auto}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.tools span{font-family:var(--f-mono);font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.about{display:flex;flex-direction:column;gap:12px;max-width:62ch}
+.about p{color:var(--muted)}
+.about strong{color:var(--ink);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.panel p{color:var(--muted)}
+form{display:flex;flex-direction:column;gap:12px}
+.hp{position:absolute;left:-9999px}
+.contact-list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.contact-list li{display:flex;gap:10px;flex-wrap:wrap;font-size:.95rem}
+.contact-list .k{font-family:var(--f-mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);min-width:84px;padding-top:2px}
+.contact-list a{color:var(--accent);text-underline-offset:3px;overflow-wrap:anywhere}
+.dl{color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
-
 <div class="wrap">
   <header>
-    <span class="eyebrow">Automation builder · Ogun State, Nigeria</span>
+    <span class="eyebrow">Automation builder · Ogun State, Nigeria · Works remotely</span>
     <h1>Henry Oyedeji</h1>
-    <p class="lede">I build <strong>workflow automations for Nigerian businesses</strong> with n8n, Google Sheets and messaging bots, and I'm learning in public through Techcrush Academy. This page tracks what I ship as I go.</p>
+    <p class="lede">I build <strong>automations that answer customers, capture leads and send alerts</strong> with n8n, WhatsApp and Telegram bots. I design them like products, because I came to automation from UI/UX design.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#contact">Start a project</a>
+      <a class="btn ghost" href="#projects">See my work</a>
+    </div>
     <div>
       <div class="chain" aria-label="Lead workflow: Webhook, Clean Data, Consent Check, Score Lead, Save Lead, Hot, Alert Loan Officer">
         <span class="node">Webhook</span><span class="arrow">→</span>
@@ -106,46 +136,37 @@ footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padd
     </div>
   </header>
 
-  <section aria-labelledby="proj-h">
-    <div class="sec-head"><h2 id="proj-h">Projects</h2><span class="eyebrow">6 projects</span></div>
-    <div class="projects">
-      <article class="project">
-        <span class="pill live">Live</span>
-        <h3>Henry Automate predictions</h3>
-        <p>A sports tips service run by n8n. Workflows build NBA, NFL and multi-league football picks from odds data, grade them after the games, and post them to a free Telegram channel. VIP members sign up through a Telegram bot, and Paystack has conditionally approved the business.</p>
-        <a href="https://henryautomate.netlify.app" target="_blank" rel="noopener">Visit the site</a>
-        <div class="stack"><span>n8n</span><span>Odds API</span><span>Google Sheets</span><span>Telegram bot</span><span>Paystack</span><span>Netlify</span></div>
-      </article>
-      <article class="project">
-        <span class="pill wip">In progress</span>
-        <h3>Hotel WhatsApp assistant</h3>
-        <p>A group project I'm leading for a demo hotel. Guests chat on WhatsApp to see the menu, hold a room or ask for the front desk. Each hold lands in Google Sheets, staff get an email alert, and an evening digest lists the next day's arrivals.</p>
-        <div class="stack"><span>n8n</span><span>Twilio WhatsApp</span><span>Google Sheets</span><span>Gmail</span><span>ngrok</span></div>
-      </article>
-      <article class="project">
-        <span class="pill live">Live</span>
-        <h3>Hotel room booking</h3>
-        <p>A guest books through a form and n8n checks every existing booking for date overlaps, holds the first free room in Google Sheets, and emails a confirmation with nights and total cost. If the room type is full, the guest gets an alternatives email instead. Tested with same-day turnovers and zero double bookings.</p>
-        <div class="stack"><span>n8n</span><span>Google Sheets</span><span>Gmail</span><span>JavaScript</span></div>
-      </article>
-      <article class="project">
-        <span class="pill live">Live</span>
-        <h3>MFB lead generation</h3>
-        <p>Captures loan enquiries for a Lagos microfinance bank, cleans and scores each one, saves it to a sheet, and sends Hot leads to Telegram with one-tap call and WhatsApp links.</p>
-        <div class="stack"><span>n8n</span><span>Google Sheets</span><span>Telegram bot</span><span>JavaScript</span></div>
-      </article>
-      <article class="project">
-        <span class="pill wip">In progress</span>
-        <h3>Business lead collector</h3>
-        <p>The outbound side of the same system: a sheet of local businesses to approach, with category, city, public contact details and source.</p>
-        <div class="stack"><span>n8n</span><span>Google Sheets</span></div>
-      </article>
-      <article class="project">
-        <span class="pill course">Techcrush Academy</span>
-        <h3>Lead qualification workflow</h3>
-        <p>My first n8n build: a webhook takes in a new lead, tidies the name, email and phone, and sorts it into Hot or Warm by budget and intent. A lead with a budget of ₦5,000,000 or more that asks to apply goes straight to Hot.</p>
-        <div class="stack"><span>n8n</span><span>Webhook</span><span>If logic</span><span>curl</span></div>
-      </article>
+  <section aria-labelledby="svc-h" id="services">
+    <div class="sec-head"><h2 id="svc-h">What I can build for you</h2></div>
+    <div class="services" id="services-list"></div>
+  </section>
+
+  <section aria-labelledby="proof-h">
+    <div class="sec-head"><h2 id="proof-h">From real test runs</h2></div>
+    <div class="proof">
+      <div class="stat"><b>6</b><span>room holds taken on WhatsApp in one day of group testing</span></div>
+      <div class="stat"><b>3 of 3</b><span>booking clash tests passed, with no double bookings</span></div>
+      <div class="stat"><b>Seconds</b><span>from a hot lead filling a form to an alert on the officer's phone</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="proj-h" id="projects">
+    <div class="sec-head"><h2 id="proj-h">Projects</h2><span class="eyebrow" id="proj-count"></span></div>
+    <div class="projects" id="projects-list"></div>
+  </section>
+
+  <section aria-labelledby="tools-h">
+    <div class="sec-head"><h2 id="tools-h">Tools I work with</h2></div>
+    <div class="tools">
+      <span>n8n</span><span>JavaScript</span><span>Twilio WhatsApp</span><span>Telegram Bot API</span><span>Google Sheets</span><span>Gmail</span><span>Supabase</span><span>Paystack</span><span>Webhooks &amp; APIs</span><span>Docker</span><span>ngrok</span><span>GitHub</span><span>Netlify</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="about-h" id="about">
+    <div class="sec-head"><h2 id="about-h">About me</h2></div>
+    <div class="about">
+      <p>I started as a <strong>designer</strong>, first in a full-time design role and then in UI/UX. That shapes how I build automations: every alert, message and email is written so the person reading it knows what to do next.</p>
+      <p>Today I build workflows for businesses like hotels, lenders, pharmacies and retailers, and I run my own automated product, Henry Automate. I'm training through <strong>Techcrush Academy</strong>, and I post everything I build in the log below.</p>
     </div>
   </section>
 
@@ -154,28 +175,109 @@ footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padd
     <ol class="log" id="log"></ol>
   </section>
 
-  <footer>Dates in West Africa Time (WAT). Updated as I build. Built with n8n know-how and hosted on Netlify.</footer>
-</div>
+  <section aria-labelledby="free-h" id="free" hidden>
+    <div class="sec-head"><h2 id="free-h">Free workflow</h2></div>
+    <div class="panel">
+      <h3 id="free-title"></h3>
+      <p id="free-text"></p>
+      <form name="free-workflow" method="POST" data-netlify="true" netlify-honeypot="company" id="free-form">
+        <input type="hidden" name="form-name" value="free-workflow">
+        <p class="hp"><label>Leave this empty<input name="company" id="free-company"></label></p>
+        <div class="row">
+          <label for="free-name">Your name<input id="free-name" name="name" required autocomplete="name"></label>
+          <label for="free-email">Email<input id="free-email" name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <div class="actions"><button class="btn" type="submit" id="free-btn">Get the workflow</button><span class="status" id="free-status" role="status"></span></div>
+      </form>
+    </div>
+  </section>
 
+  <section aria-labelledby="contact-h" id="contact">
+    <div class="sec-head"><h2 id="contact-h">Let's work together</h2></div>
+    <div class="panel">
+      <p>Tell me what eats up your team's time and I'll reply with how I'd automate it. Usually within a day.</p>
+      <ul class="contact-list" id="contact-list"></ul>
+      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="company" id="contact-form">
+        <input type="hidden" name="form-name" value="contact">
+        <p class="hp"><label>Leave this empty<input name="company" id="c-company"></label></p>
+        <div class="row">
+          <label for="c-name">Your name<input id="c-name" name="name" required autocomplete="name"></label>
+          <label for="c-email">Email<input id="c-email" name="email" type="email" required autocomplete="email"></label>
+        </div>
+        <label for="c-msg">What do you want to automate?<textarea id="c-msg" name="message" required maxlength="3000" placeholder="e.g. We get bookings on WhatsApp and Instagram and keep losing track of them."></textarea></label>
+        <div class="actions"><button class="btn" type="submit" id="c-btn">Send message</button><span class="status" id="c-status" role="status"></span></div>
+      </form>
+    </div>
+  </section>
+
+  <footer>Dates in West Africa Time (WAT). Updated as I build.</footer>
+</div>
+<script src="site.js"></script>
 <script src="posts.js"></script>
 <script>
 (function(){
-  var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var SITE = window.SITE || {}, MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+  // Services
+  var sl=document.getElementById("services-list");
+  (SITE.services||[]).forEach(function(s){
+    var c=el("article","service"); c.appendChild(el("h3",null,s.title)); c.appendChild(el("p",null,s.text));
+    c.appendChild(el("span","price",s.price? s.price : "Get a quote")); sl.appendChild(c);
+  });
+  if(!sl.children.length) document.getElementById("services").hidden=true;
+
+  // Projects
+  var labels={live:"Live",wip:"In progress",course:"Techcrush Academy"}, pl=document.getElementById("projects-list"), projects=SITE.projects||[];
+  document.getElementById("proj-count").textContent=projects.length+" projects";
+  projects.forEach(function(p){
+    var c=el("article","project");
+    c.appendChild(el("span","pill "+(p.status||"live"),labels[p.status]||"Live"));
+    if(p.image){ var f=el("div","shot"), i=el("img"); i.src=p.image; i.alt="Screenshot of "+p.title; i.loading="lazy"; i.onerror=function(){ f.remove(); }; f.appendChild(i); c.appendChild(f); }
+    c.appendChild(el("h3",null,p.title)); c.appendChild(el("p",null,p.text));
+    if(p.link){ var a=el("a",null,p.linkText||"Open"); a.href=p.link; a.target="_blank"; a.rel="noopener"; c.appendChild(a); }
+    var st=el("div","stack"); (p.stack||[]).forEach(function(t){ st.appendChild(el("span",null,t)); }); c.appendChild(st);
+    pl.appendChild(c);
+  });
+
+  // Build log
   var posts=(window.POSTS||[]).slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
-  var logEl=document.getElementById("log"),countEl=document.getElementById("log-count");
+  var logEl=document.getElementById("log");
   function fmt(d){var p=String(d).split("-");return Number(p[2])+" "+(MONTHS[Number(p[1])-1]||"")+" "+p[0];}
-  countEl.textContent=posts.length+(posts.length===1?" update":" updates");
-  if(!posts.length){var e=document.createElement("li");e.className="empty";e.textContent="No updates yet.";logEl.appendChild(e);return;}
+  document.getElementById("log-count").textContent=posts.length+(posts.length===1?" update":" updates");
   posts.forEach(function(p){
-    var li=document.createElement("li");li.className="entry";
-    var w=document.createElement("time");w.className="when";w.dateTime=p.date;w.textContent=fmt(p.date);
-    var b=document.createElement("div");b.className="body";
-    var m=document.createElement("div");m.className="meta";
-    var t=document.createElement("span");t.className="tag";t.dataset.t=p.tag;t.textContent=p.tag;m.appendChild(t);
-    var h=document.createElement("h3");h.textContent=p.title;
-    b.appendChild(m);b.appendChild(h);
-    if(p.text){var x=document.createElement("p");x.textContent=p.text;b.appendChild(x);}
-    li.appendChild(w);li.appendChild(b);logEl.appendChild(li);
+    var li=el("li","entry"), w=el("time","when",fmt(p.date)); w.dateTime=p.date;
+    var b=el("div","body"), m=el("div","meta"), t=el("span","tag",p.tag); t.dataset.t=p.tag; m.appendChild(t);
+    b.appendChild(m); b.appendChild(el("h3",null,p.title)); if(p.text) b.appendChild(el("p",null,p.text));
+    li.appendChild(w); li.appendChild(b); logEl.appendChild(li);
+  });
+
+  // Contact details (only the ones filled in)
+  var ct=SITE.contact||{}, cl=document.getElementById("contact-list");
+  function addContact(k,label,href){ var li=el("li"); li.appendChild(el("span","k",k)); var a=el("a",null,label); a.href=href; if(/^https?:/.test(href)){a.target="_blank";a.rel="noopener";} li.appendChild(a); cl.appendChild(li); }
+  if(ct.email) addContact("Email",ct.email,"mailto:"+ct.email);
+  if(ct.whatsapp){ var n=String(ct.whatsapp).replace(/\D/g,""); addContact("WhatsApp","+"+n,"https://wa.me/"+n); }
+  if(ct.linkedin) addContact("LinkedIn",ct.linkedin.replace(/^https?:\/\/(www\.)?/,""),ct.linkedin);
+  if(ct.github) addContact("GitHub",ct.github.replace(/^https?:\/\//,""),ct.github);
+  if(!cl.children.length) cl.hidden=true;
+
+  // Free workflow
+  var fw=SITE.freeWorkflow||{};
+  if(fw.file){ document.getElementById("free").hidden=false; document.getElementById("free-title").textContent=fw.title||"Free workflow"; document.getElementById("free-text").textContent=fw.text||""; }
+
+  // Netlify Forms (submitted in the background so the page doesn't reload)
+  function wire(formId,btnId,statusId,onDone){
+    var f=document.getElementById(formId), btn=document.getElementById(btnId), st=document.getElementById(statusId);
+    f.addEventListener("submit",function(e){
+      e.preventDefault(); btn.disabled=true; st.className="status"; st.textContent="Sending…";
+      fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(f)).toString()})
+        .then(function(r){ if(!r.ok) throw 0; onDone(f,st); })
+        .catch(function(){ st.className="status err"; st.textContent="That didn't go through. Check your connection and try again."; btn.disabled=false; });
+    });
+  }
+  wire("contact-form","c-btn","c-status",function(f,st){ f.reset(); st.textContent="Message sent. I'll get back to you soon."; });
+  wire("free-form","free-btn","free-status",function(f,st){
+    st.textContent=""; var a=el("a","dl","Download the workflow"); a.href=fw.file; a.setAttribute("download",""); st.appendChild(a);
   });
 })();
 </script>
