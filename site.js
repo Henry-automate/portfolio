@@ -137,8 +137,8 @@ window.SITE = {
   // Export a workflow from n8n (⋯ menu → Download), put the .json file in a "workflows" folder,
   // and type its path here, e.g. "workflows/lead-alert.json". Leave "" to hide this section.
   freeWorkflow: {
-    file: "",
-    title: "Free n8n workflow: lead → instant Telegram alert",
-    text: "The same pattern behind my microfinance lead system. Import it into n8n, add your own Telegram bot, and new leads reach your phone in seconds."
+    file: "workflows/flight-search-tool.json",
+    title: "Free n8n workflow: Google Flights search, priced in naira",
+    text: "The tool behind my travel agency flight-quote agent. Give it two airport codes and a date and it returns the 10 cheapest one-way flights, with each fare converted to naira at the official CBN rate. It works on its own or plugged into an AI agent, and setup notes are inside."
   }
 };

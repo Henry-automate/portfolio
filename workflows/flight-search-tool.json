@@ -1,0 +1,528 @@
+{
+  "name": "Flight Search Tool (Google Flights → cheapest 10, priced in naira)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -224
+      ],
+      "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0001",
+      "name": "Test it"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "departure_id"
+            },
+            {
+              "name": "arrival_id"
+            },
+            {
+              "name": "outbound_date"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0d97ca83-074e-4b78-9e88-119170f786c4",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_flights"
+            },
+            {
+              "name": "departure_id",
+              "value": "={{ $json.departure_id }}"
+            },
+            {
+              "name": "arrival_id",
+              "value": "={{ $json.arrival_id }}"
+            },
+            {
+              "name": "outbound_date",
+              "value": "={{ $json.outbound_date }}"
+            },
+            {
+              "name": "type",
+              "value": "2"
+            },
+            {
+              "name": "currency",
+              "value": "USD"
+            },
+            {
+              "name": "hl",
+              "value": "en"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b4e3b3c6-b439-4c99-9e23-e93849611a3a",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "",
+          "name": "SerpApi (add your own)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e6c2f295-77e1-4713-a46b-221d86470d28",
+              "name": "all_flights",
+              "value": "={{ [ ...($json.best_flights ?? []), ...($json.other_flights ?? []) ] }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "64ca66b9-3822-499c-8b79-32201401aeed",
+      "name": "Combine Flights"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "all_flights",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "a624de78-aa7c-4e99-b4ab-0393022d8576",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ad207cce-4b7e-4d70-a328-1c8bf91b7d24",
+              "name": "price_usd",
+              "value": "={{ $json.price }}",
+              "type": "number"
+            },
+            {
+              "id": "ef4e51cd-85ef-4135-abaf-821bd08b81c7",
+              "name": "duration_mins",
+              "value": "={{ $json.total_duration }}",
+              "type": "number"
+            },
+            {
+              "id": "0ec57482-a1cb-4c1c-b7b6-de830be6e3b5",
+              "name": "departs",
+              "value": "={{ $json.flights[0].departure_airport.time }}",
+              "type": "string"
+            },
+            {
+              "id": "268efec0-619c-4db4-bcc0-b4d782ed0471",
+              "name": "airline",
+              "value": "={{ $json.flights.map(f=> f.airline) .join('+')}}",
+              "type": "string"
+            },
+            {
+              "id": "7cbeb016-180e-4fc1-8d60-5b82a45a3511",
+              "name": "flight_numbers",
+              "value": "={{ $json.flights.map(f=> f.flight_number).join('/') }}",
+              "type": "string"
+            },
+            {
+              "id": "f5efb47e-6b93-4e02-bbee-186f4c03de27",
+              "name": "arrives",
+              "value": "={{ $json.flights.at(-1).arrival_airport.time }}",
+              "type": "string"
+            },
+            {
+              "id": "1ac37d6a-f912-4dbb-a574-6baa36042f1c",
+              "name": "stops",
+              "value": "={{ $json.flights.length - 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        0
+      ],
+      "id": "c86f2cc6-ffc9-4da1-a7e0-8225ee5c8c20",
+      "name": "Clean Flights"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "price_usd"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "b20dd1e7-9ce4-45e5-baec-5f1a82d38289",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "31c95f6a-6e78-45e9-a1d4-4120e5f9cd02",
+              "leftValue": "={{ $json.price_usd }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "c8c8c30c-bc3f-419b-aa47-462a04c1468e",
+      "name": "Price"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "d0a8dfc2-f0e2-4ab2-8623-36239d19ae7d",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "flights",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        0
+      ],
+      "id": "4bb5044f-1337-4c5a-95e1-f715fce8e391",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "url": "https://api.frankfurter.dev/v2/providers/cbn/rates",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "base",
+              "value": "USD"
+            },
+            {
+              "name": "quotes",
+              "value": "NGN"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        2016,
+        0
+      ],
+      "id": "24af93ba-c87f-4d08-b419-674e34f0b44a",
+      "name": "Get Naira Rate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a835bbe4-1f27-4e4e-ac62-cbcddab832dd",
+              "name": "cbn_rate",
+              "value": "={{ $json.rate }}",
+              "type": "number"
+            },
+            {
+              "id": "aa9edc54-b700-4903-8d8b-8a95c0a5d537",
+              "name": "rate_date",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "672c5efa-17f1-4247-a15f-40c1ded15333",
+              "name": "flights",
+              "value": "={{ $('Aggregate').item.json.flights.map(f => ({ ...f, price_ngn: Math.round(f.price_usd * $json.rate) })) }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2240,
+        0
+      ],
+      "id": "7aeb06b2-0e82-4c57-9898-64052d95ffe1",
+      "name": "Naira"
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0003",
+              "name": "departure_id",
+              "value": "LOS",
+              "type": "string"
+            },
+            {
+              "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0004",
+              "name": "arrival_id",
+              "value": "LHR",
+              "type": "string"
+            },
+            {
+              "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0005",
+              "name": "outbound_date",
+              "value": "={{ $now.plus({days: 14}).toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        -224
+      ],
+      "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0002",
+      "name": "Sample route"
+    },
+    {
+      "parameters": {
+        "content": "## Flight Search Tool\nby Henry Oyedeji · henry-oyedeji.netlify.app\n\nSearches Google Flights for one-way fares, keeps the 10 cheapest, and adds each price in **naira** at the official CBN rate.\n\n### Setup (5 minutes)\n1. Get a free API key at **serpapi.com**.\n2. Open **HTTP Request** → Credential → create *Query Auth*: Name `api_key`, Value = your key.\n3. Click **Test it** to run the sample route (Lagos → London, two weeks from today).\n\n### Use it from an AI agent\nAdd a *Call n8n Workflow Tool* to your agent and pick this workflow. Inputs: `departure_id`, `arrival_id` (airport codes like LOS, ABV, LHR) and `outbound_date` (YYYY-MM-DD).\n\nWant it changed — return trips, other currencies, email quotes? WhatsApp 08147754921.",
+        "height": 520,
+        "width": 460,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -260
+      ],
+      "id": "5a0b2a7e-1d1f-4b8a-9a54-3f1c7e0b0006",
+      "name": "Read me"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Combine Flights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Flights": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Clean Flights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean Flights": {
+      "main": [
+        [
+          {
+            "node": "Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Price": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Get Naira Rate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Naira Rate": {
+      "main": [
+        [
+          {
+            "node": "Naira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Test it": {
+      "main": [
+        [
+          {
+            "node": "Sample route",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample route": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Africa/Lagos",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": []
+}
