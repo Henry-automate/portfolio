@@ -96,6 +96,11 @@ footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padd
 .stat span{font-size:.88rem;color:var(--muted)}
 .shot{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg)}
 .shot img{display:block;width:100%;height:auto}
+a.shot{display:block;cursor:zoom-in}
+.gallery{border-top:1px solid var(--line);padding-top:10px}
+.gallery summary{cursor:pointer;color:var(--accent);font-size:.9rem;font-weight:500;list-style-position:inside}
+.gallery figure{margin:12px 0 0;display:flex;flex-direction:column;gap:6px}
+.gallery figcaption{font-size:.82rem;color:var(--muted)}
 .tools{display:flex;flex-wrap:wrap;gap:8px}
 .tools span{font-family:var(--f-mono);font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
 .about{display:flex;flex-direction:column;gap:12px;max-width:62ch}
@@ -158,7 +163,7 @@ form{display:flex;flex-direction:column;gap:12px}
   <section aria-labelledby="tools-h">
     <div class="sec-head"><h2 id="tools-h">Tools I work with</h2></div>
     <div class="tools">
-      <span>n8n</span><span>JavaScript</span><span>Twilio WhatsApp</span><span>Telegram Bot API</span><span>Google Sheets</span><span>Gmail</span><span>Supabase</span><span>Paystack</span><span>Webhooks &amp; APIs</span><span>Docker</span><span>ngrok</span><span>GitHub</span><span>Netlify</span>
+      <span>n8n</span><span>JavaScript</span><span>Twilio WhatsApp</span><span>Telegram Bot API</span><span>Google Sheets</span><span>Gmail</span><span>Google Gemini</span><span>AI Agents</span><span>SerpAPI</span><span>Supabase</span><span>Paystack</span><span>Webhooks &amp; APIs</span><span>Docker</span><span>ngrok</span><span>GitHub</span><span>Netlify</span>
     </div>
   </section>
 
@@ -233,8 +238,20 @@ form{display:flex;flex-direction:column;gap:12px}
   projects.forEach(function(p){
     var c=el("article","project");
     c.appendChild(el("span","pill "+(p.status||"live"),labels[p.status]||"Live"));
-    if(p.image){ var f=el("div","shot"), i=el("img"); i.src=p.image; i.alt="Screenshot of "+p.title; i.loading="lazy"; i.onerror=function(){ f.remove(); }; f.appendChild(i); c.appendChild(f); }
+    if(p.image){ var f=el("a","shot"), i=el("img"); f.href=p.image; f.target="_blank"; f.rel="noopener"; i.src=p.image; i.alt="Screenshot of the "+p.title+" workflow in n8n"; i.loading="lazy"; i.onerror=function(){ f.remove(); }; f.appendChild(i); c.appendChild(f); }
     c.appendChild(el("h3",null,p.title)); c.appendChild(el("p",null,p.text));
+    if(p.gallery && p.gallery.length){
+      var d=el("details","gallery"), s=el("summary",null,"See the "+p.gallery.length+" workflow"+(p.gallery.length===1?"":"s"));
+      d.appendChild(s);
+      p.gallery.forEach(function(g){
+        var fig=el("figure"), a=el("a","shot"), im=el("img");
+        a.href=g.src; a.target="_blank"; a.rel="noopener"; im.src=g.src; im.alt=g.caption||("Workflow screenshot for "+p.title); im.loading="lazy";
+        im.onerror=function(){ fig.remove(); }; a.appendChild(im); fig.appendChild(a);
+        if(g.caption) fig.appendChild(el("figcaption",null,g.caption));
+        d.appendChild(fig);
+      });
+      c.appendChild(d);
+    }
     if(p.link){ var a=el("a",null,p.linkText||"Open"); a.href=p.link; a.target="_blank"; a.rel="noopener"; c.appendChild(a); }
     var st=el("div","stack"); (p.stack||[]).forEach(function(t){ st.appendChild(el("span",null,t)); }); c.appendChild(st);
     pl.appendChild(c);

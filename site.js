@@ -47,18 +47,65 @@ window.SITE = {
   // status: "live", "wip" or "course"
   // image:  a screenshot you uploaded to the "images" folder, e.g. "images/hotel-bot.png". Leave "" for no image.
   // link / linkText: optional button, e.g. a live demo. Leave "" to hide it.
+  // gallery: optional list of extra screenshots, shown under "See the N workflows".
+  //          Each one is { src: "images/workflows/name.webp", caption: "what it does" }.
   projects: [
     {
       status: "live", title: "Henry Automate predictions",
-      text: "A sports tips service run by n8n. Workflows build NBA, NFL and multi-league football picks from odds data, grade them after the games, and post them to a free Telegram channel. VIP members sign up through a Telegram bot.",
-      stack: ["n8n", "Odds API", "Google Sheets", "Telegram bot", "Paystack", "Netlify"],
-      image: "", link: "https://henryautomate.netlify.app", linkText: "Visit the site"
+      text: "A sports tips service run by n8n. Workflows build NBA, NFL and multi-league football picks from odds, standings, injuries and player stats, lock them before kick-off, grade them after the games and post them to a free Telegram channel. A separate workflow records closing odds so I can check whether the model really beats the market.",
+      stack: ["n8n", "Odds API", "ESPN data", "JavaScript", "Google Sheets", "Telegram bot", "Netlify"],
+      image: "images/workflows/multi-league-predictions.webp", link: "https://henryautomate.netlify.app", linkText: "Visit the site",
+      gallery: [
+        { src: "images/workflows/multi-league-predictions.webp", caption: "Multi-league football: team ratings, predictions and a Monday scorecard" },
+        { src: "images/workflows/nba-predictions.webp", caption: "NBA picks: odds, standings, injuries and player stats into the model" },
+        { src: "images/workflows/nfl-predictions.webp", caption: "NFL picks: the same engine adapted for the NFL" },
+        { src: "images/workflows/nba-grading.webp", caption: "NBA grading: final scores, win/loss and the running scorecard" },
+        { src: "images/workflows/nfl-grading.webp", caption: "NFL grading" },
+        { src: "images/workflows/nba-closing-lines.webp", caption: "Closing lines: tracks closing odds against the price at pick time" }
+      ]
+    },
+    {
+      status: "live", title: "VIP Telegram gatekeeper",
+      text: "Sells VIP channel access by bank transfer, with no manual inbox work. The bot shows the plans and bank details, Gemini reads each payment receipt, invalid and already-used receipts are turned away, and I approve real payments with one tap. Approval creates a one-time invite link and activates the member in the sheet.",
+      stack: ["n8n", "Telegram Bot API", "Gemini", "Google Sheets", "ngrok"],
+      image: "images/workflows/vip-gatekeeper-receipts.webp", link: "", linkText: "",
+      gallery: [
+        { src: "images/workflows/vip-gatekeeper-receipts.webp", caption: "Receipts: AI receipt check, duplicate block, approve or reject" },
+        { src: "images/workflows/vip-payments-bot.webp", caption: "Payments bot: plans, bank details, invite links and rejections" }
+      ]
     },
     {
       status: "wip", title: "Hotel WhatsApp assistant",
-      text: "A group project I'm leading for a demo hotel. Guests chat on WhatsApp to see the menu, hold a room or ask for the front desk. Each hold lands in Google Sheets, staff get an email alert, and an evening digest lists the next day's arrivals.",
-      stack: ["n8n", "Twilio WhatsApp", "Google Sheets", "Gmail", "ngrok"],
-      image: "", link: "https://grand-hotel-demo-ng.netlify.app", linkText: "Try the live demo"
+      text: "A group project I'm leading for a demo hotel. Guests chat on WhatsApp to see the menu, hold a room or ask for the front desk. Each hold is checked against existing rooms and bookings, lands in Google Sheets and triggers an email alert. Scheduled jobs send an evening arrivals digest, pre-arrival reminders through approved WhatsApp templates (with a plain-message fallback) and check-out follow-ups.",
+      stack: ["n8n", "Twilio WhatsApp", "Webhooks", "Google Sheets", "Gmail", "ngrok"],
+      image: "images/workflows/hotel-whatsapp-bot.webp", link: "https://grand-hotel-demo-ng.netlify.app", linkText: "Try the live demo",
+      gallery: [
+        { src: "images/workflows/hotel-whatsapp-bot.webp", caption: "Guest bot: one webhook routes every WhatsApp message" },
+        { src: "images/workflows/hotel-scheduled-messages.webp", caption: "Scheduled messages: digest, reminders with fallback, follow-ups" }
+      ]
+    },
+    {
+      status: "course", title: "Supersaver supermarket ops",
+      text: "Four workflows for a Lagos supermarket chain. Job applications are screened from emailed PDF CVs with AI, the bakery gets a bake plan from sales data, staff stock counts are checked and routed as Urgent, Warning or Count Error, and the end-of-day close is logged with an email alert when a check fails.",
+      stack: ["n8n", "Gmail", "Gemini", "PDF extraction", "Forms", "Google Sheets"],
+      image: "images/workflows/supersaver-stock-count.webp", link: "", linkText: "",
+      gallery: [
+        { src: "images/workflows/supersaver-cv-screener.webp", caption: "CV screener: Gmail → PDF → Gemini → sheet → auto-reply" },
+        { src: "images/workflows/supersaver-bake-planner.webp", caption: "Bake planner: daily sales summary emailed to the bakery" },
+        { src: "images/workflows/supersaver-stock-count.webp", caption: "Stock count: form → check → Urgent / Warning / Count Error" },
+        { src: "images/workflows/supersaver-daily-close.webp", caption: "Daily close: form → sheet → alert when a check fails" }
+      ]
+    },
+    {
+      status: "wip", title: "Travel agency enquiries & flight quotes",
+      text: "Enquiries for a Nigerian travel agency are scored Hot, Warm or Cold and saved to a CRM sheet, and hot leads alert the team at once. For flight requests, an AI agent searches live Google Flights fares, keeps the cheapest options, converts them to naira at today's rate and emails the customer a quote.",
+      stack: ["n8n", "AI Agent", "Gemini", "SerpAPI", "Google Sheets", "Gmail"],
+      image: "images/workflows/travel-enquiry-intake.webp", link: "", linkText: "",
+      gallery: [
+        { src: "images/workflows/travel-enquiry-intake.webp", caption: "Enquiry intake: lead scoring, CRM and the flight-quote agent" },
+        { src: "images/workflows/flight-finder-agent.webp", caption: "Flight finder: a chat agent with memory and a search tool" },
+        { src: "images/workflows/flight-search-tool.webp", caption: "Flight search tool: fetch, clean, filter, sort and convert to naira" }
+      ]
     },
     {
       status: "live", title: "Hotel room booking",
