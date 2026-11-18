@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Henry Oyedeji Builds</title>
+<meta name="description" content="Henry Oyedeji builds n8n workflow automations for Nigerian businesses. Projects and a dated build log.">
+<meta property="og:title" content="Henry Oyedeji Builds">
+<meta property="og:description" content="n8n automations, WhatsApp and Telegram bots, built in public from Ogun State, Nigeria.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d7552'/%3E%3Ctext x='16' y='22' font-family='Arial' font-size='16' font-weight='700' fill='white' text-anchor='middle'%3EHO%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0}
+
+/* Layout: one calm reading column; hero carries the real workflow as a node chain, then projects, then a dated build log. */
+:root{
+  --bg:#f5f7f4; --surface:#ffffff; --ink:#14201a; --muted:#56655c; --line:#d9e0da;
+  --accent:#1d7552; --accent-soft:#e1efe7; --amber:#a8661c; --amber-soft:#f6ead9;
+  --danger:#b3372b;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1512; --surface:#161e1a; --ink:#e6ede8; --muted:#9aaba1; --line:#28332d;
+  --accent:#5cc79a; --accent-soft:#183428; --amber:#e0a35a; --amber-soft:#33261a; --danger:#ef7d70; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1512; --surface:#161e1a; --ink:#e6ede8; --muted:#9aaba1; --line:#28332d;
+  --accent:#5cc79a; --accent-soft:#183428; --amber:#e0a35a; --amber-soft:#33261a; --danger:#ef7d70; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding-block:40px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.1rem,6vw,3.1rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:1.45rem;font-weight:700}
+h3{font-size:1.12rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:14px}
+.lede{font-size:1.1rem;color:var(--muted);max-width:60ch}
+.lede strong{color:var(--ink);font-weight:600}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;margin-top:10px}
+.node{font-family:var(--f-mono);font-size:.82rem;padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface);white-space:nowrap}
+.node.end{border-color:var(--accent);background:var(--accent-soft);color:var(--ink);font-weight:500}
+.arrow{color:var(--muted);font-family:var(--f-mono);font-size:.82rem}
+.chain-cap{font-size:.85rem;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:20px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.project{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.project p{color:var(--muted);font-size:.95rem}
+.project a{color:var(--accent);font-size:.9rem;font-weight:500;text-underline-offset:3px}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+.stack span{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 7px}
+.pill{align-self:flex-start;font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.pill.live{background:var(--accent-soft);color:var(--accent)}
+.pill.wip{background:var(--amber-soft);color:var(--amber)}
+.pill.course{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.entry{display:grid;grid-template-columns:96px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
+.when{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+.body{display:flex;flex-direction:column;gap:6px;min-width:0}
+.body p{color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.tag[data-t="Learning"]{color:var(--amber)}
+.empty{color:var(--muted);padding:18px 0}
+.composer{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.row>label{flex:1 1 160px}
+label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:500}
+input,select,textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;box-sizing:border-box}
+textarea{min-height:96px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:600;font-size:.92rem;background:var(--accent);color:var(--bg);border:0;border-radius:6px;padding:9px 16px;cursor:pointer}
+.btn:disabled{opacity:.55;cursor:default}
+.status{font-size:.85rem;color:var(--muted)}
+.status.err{color:var(--danger)}
+footer{font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){ .entry{grid-template-columns:1fr;gap:4px} }
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Automation builder · Ogun State, Nigeria</span>
+    <h1>Henry Oyedeji</h1>
+    <p class="lede">I build <strong>workflow automations for Nigerian businesses</strong> with n8n, Google Sheets and messaging bots, and I'm learning in public through Techcrush Academy. This page tracks what I ship as I go.</p>
+    <div>
+      <div class="chain" aria-label="Lead workflow: Webhook, Clean Data, Consent Check, Score Lead, Save Lead, Hot, Alert Loan Officer">
+        <span class="node">Webhook</span><span class="arrow">→</span>
+        <span class="node">Clean Data</span><span class="arrow">→</span>
+        <span class="node">Consent Check</span><span class="arrow">→</span>
+        <span class="node">Score Lead</span><span class="arrow">→</span>
+        <span class="node">Save Lead</span><span class="arrow">→</span>
+        <span class="node">Hot?</span><span class="arrow">→</span>
+        <span class="node end">Alert Loan Officer</span>
+      </div>
+      <p class="chain-cap">My first live workflow: a loan lead goes from web form to a loan officer's phone in seconds.</p>
+    </div>
+  </header>
+
+  <section aria-labelledby="proj-h">
+    <div class="sec-head"><h2 id="proj-h">Projects</h2><span class="eyebrow">6 projects</span></div>
+    <div class="projects">
+      <article class="project">
+        <span class="pill live">Live</span>
+        <h3>Henry Automate predictions</h3>
+        <p>A sports tips service run by n8n. Workflows build NBA, NFL and multi-league football picks from odds data, grade them after the games, and post them to a free Telegram channel. VIP members sign up through a Telegram bot, and Paystack has conditionally approved the business.</p>
+        <a href="https://henryautomate.netlify.app" target="_blank" rel="noopener">Visit the site</a>
+        <div class="stack"><span>n8n</span><span>Odds API</span><span>Google Sheets</span><span>Telegram bot</span><span>Paystack</span><span>Netlify</span></div>
+      </article>
+      <article class="project">
+        <span class="pill wip">In progress</span>
+        <h3>Hotel WhatsApp assistant</h3>
+        <p>A group project I'm leading for a demo hotel. Guests chat on WhatsApp to see the menu, hold a room or ask for the front desk. Each hold lands in Google Sheets, staff get an email alert, and an evening digest lists the next day's arrivals.</p>
+        <div class="stack"><span>n8n</span><span>Twilio WhatsApp</span><span>Google Sheets</span><span>Gmail</span><span>ngrok</span></div>
+      </article>
+      <article class="project">
+        <span class="pill live">Live</span>
+        <h3>Hotel room booking</h3>
+        <p>A guest books through a form and n8n checks every existing booking for date overlaps, holds the first free room in Google Sheets, and emails a confirmation with nights and total cost. If the room type is full, the guest gets an alternatives email instead. Tested with same-day turnovers and zero double bookings.</p>
+        <div class="stack"><span>n8n</span><span>Google Sheets</span><span>Gmail</span><span>JavaScript</span></div>
+      </article>
+      <article class="project">
+        <span class="pill live">Live</span>
+        <h3>MFB lead generation</h3>
+        <p>Captures loan enquiries for a Lagos microfinance bank, cleans and scores each one, saves it to a sheet, and sends Hot leads to Telegram with one-tap call and WhatsApp links.</p>
+        <div class="stack"><span>n8n</span><span>Google Sheets</span><span>Telegram bot</span><span>JavaScript</span></div>
+      </article>
+      <article class="project">
+        <span class="pill wip">In progress</span>
+        <h3>Business lead collector</h3>
+        <p>The outbound side of the same system: a sheet of local businesses to approach, with category, city, public contact details and source.</p>
+        <div class="stack"><span>n8n</span><span>Google Sheets</span></div>
+      </article>
+      <article class="project">
+        <span class="pill course">Techcrush Academy</span>
+        <h3>Lead qualification workflow</h3>
+        <p>My first n8n build: a webhook takes in a new lead, tidies the name, email and phone, and sorts it into Hot or Warm by budget and intent. A lead with a budget of ₦5,000,000 or more that asks to apply goes straight to Hot.</p>
+        <div class="stack"><span>n8n</span><span>Webhook</span><span>If logic</span><span>curl</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="log-h">
+    <div class="sec-head"><h2 id="log-h">Build log</h2><span class="eyebrow" id="log-count"></span></div>
+    <ol class="log" id="log"></ol>
+  </section>
+
+  <footer>Dates in West Africa Time (WAT). Updated as I build. Built with n8n know-how and hosted on Netlify.</footer>
+</div>
+
+<script src="posts.js"></script>
+<script>
+(function(){
+  var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var posts=(window.POSTS||[]).slice().sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:0;});
+  var logEl=document.getElementById("log"),countEl=document.getElementById("log-count");
+  function fmt(d){var p=String(d).split("-");return Number(p[2])+" "+(MONTHS[Number(p[1])-1]||"")+" "+p[0];}
+  countEl.textContent=posts.length+(posts.length===1?" update":" updates");
+  if(!posts.length){var e=document.createElement("li");e.className="empty";e.textContent="No updates yet.";logEl.appendChild(e);return;}
+  posts.forEach(function(p){
+    var li=document.createElement("li");li.className="entry";
+    var w=document.createElement("time");w.className="when";w.dateTime=p.date;w.textContent=fmt(p.date);
+    var b=document.createElement("div");b.className="body";
+    var m=document.createElement("div");m.className="meta";
+    var t=document.createElement("span");t.className="tag";t.dataset.t=p.tag;t.textContent=p.tag;m.appendChild(t);
+    var h=document.createElement("h3");h.textContent=p.title;
+    b.appendChild(m);b.appendChild(h);
+    if(p.text){var x=document.createElement("p");x.textContent=p.text;b.appendChild(x);}
+    li.appendChild(w);li.appendChild(b);logEl.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

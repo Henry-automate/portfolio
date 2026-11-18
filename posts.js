@@ -1,0 +1,18 @@
+// Your build log. To add an update, copy one line, paste it at the top of the list,
+// and change the date (YYYY-MM-DD), tag (Build, Milestone, Learning or Client), title and text.
+// Keep the comma at the end of every line.
+window.POSTS = [
+  {"date": "2026-11-17", "tag": "Build", "title": "Upgraded my NBA and NFL prediction workflows", "text": "Upgraded the US sports prediction workflows that feed the Henry Automate channels."},
+  {"date": "2026-11-17", "tag": "Build", "title": "Next fix: overlapping room holds", "text": "Testing turned up a gap. Room 201 was held three times for overlapping dates, so the availability check needs to count rooms that are on hold, not just confirmed bookings."},
+  {"date": "2026-11-17", "tag": "Milestone", "title": "Hotel WhatsApp bot handled a full day of testing", "text": "My group tested the bot on WhatsApp all day. It took 6 room holds, passed 2 guests to the front desk, and sent the 8 pm digest with the 2 guests arriving the next day. Every alert landed in the hotel's inbox."},
+  {"date": "2026-11-17", "tag": "Milestone", "title": "Henry Automate site is live", "text": "Rebuilt the site and moved it to Netlify at henryautomate.netlify.app. The VIP buttons now open the sign-up bot on Telegram."},
+  {"date": "2026-11-16", "tag": "Milestone", "title": "Paystack conditionally approved Henry Automate", "text": "Recorded a 75-second walkthrough of the free channel and the VIP flow for Paystack's review team. They conditionally approved the business."},
+  {"date": "2026-11-16", "tag": "Build", "title": "VIP gatekeeper bot went live", "text": "Published the receipts workflow that controls who gets into the VIP Telegram channel. It runs on my local n8n through ngrok."},
+  {"date": "2026-10-18", "tag": "Milestone", "title": "Hotel booking workflow is live", "text": "Published the workflow so bookings now come in through the form's production link, and every run shows up in Executions. Wrote up the full build, including every bug I hit and how I fixed it."},
+  {"date": "2026-10-18", "tag": "Build", "title": "Date-based booking: no more double bookings", "text": "Replaced the Available/Reserved status with a Bookings tab and a JavaScript Code node that checks for date overlaps. Three tests passed: a clash moved the guest to Room 202, a full room type sent the alternatives email, and a same-day turnover gave Room 201 to the next guest."},
+  {"date": "2026-10-18", "tag": "Learning", "title": "Wrote my first date maths expression", "text": "Worked out the number of nights with new Date() and dividing by 86,400,000, then multiplied by the nightly rate and formatted it with toLocaleString('en-NG'). The confirmation email now shows Total: ₦190,000."},
+  {"date": "2026-10-15", "tag": "Milestone", "title": "Lead alerts are live", "text": "Published the MFB lead workflow and sent a live test lead through the production webhook. The loan officer gets a Telegram alert in seconds, with the phone number and a WhatsApp link that open with one tap."},
+  {"date": "2026-10-15", "tag": "Build", "title": "Cleaner, tappable alerts", "text": "Fixed the alert so each detail sits on its own line, formatted loan amounts with Naira commas, and added a wa.me link built by stripping everything but digits from the phone number."},
+  {"date": "2026-10-14", "tag": "Build", "title": "Started the outbound side", "text": "Set up the Business Lead Collector sheet for prospecting local businesses: category, city, public contact details and source."},
+  {"date": "2026-10-12", "tag": "Learning", "title": "First n8n lead workflow", "text": "Started my Techcrush Academy assignment: New Lead → Qualification → CRM → Notification, running n8n locally and testing the webhook with curl."}
+];
