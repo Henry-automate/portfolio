@@ -2,6 +2,7 @@
 // and change the date (YYYY-MM-DD), tag (Build, Milestone, Learning or Client), title and text.
 // Keep the comma at the end of every line.
 window.POSTS = [
+  {"date": "2026-11-22", "tag": "Milestone", "title": "First real VIP payment through Paystack", "text": "Switched the VIP gatekeeper bot from test mode to live Paystack payments. A real ₦2,000 weekly VIP payment came through: tap Pay, check out, and the bot sends the private VIP link automatically."},
   {"date": "2026-11-17", "tag": "Build", "title": "Upgraded my NBA and NFL prediction workflows", "text": "Upgraded the US sports prediction workflows that feed the Henry Automate channels."},
   {"date": "2026-11-17", "tag": "Build", "title": "Next fix: overlapping room holds", "text": "Testing turned up a gap. Room 201 was held three times for overlapping dates, so the availability check needs to count rooms that are on hold, not just confirmed bookings."},
   {"date": "2026-11-17", "tag": "Milestone", "title": "Hotel WhatsApp bot handled a full day of testing", "text": "My group tested the bot on WhatsApp all day. It took 6 room holds, passed 2 guests to the front desk, and sent the 8 pm digest with the 2 guests arriving the next day. Every alert landed in the hotel's inbox."},
